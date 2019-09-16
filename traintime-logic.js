@@ -1,3 +1,5 @@
+//RJ = added my comments with an RJ 
+
 // Steps to complete:
 
 // 1. Create Firebase link
@@ -7,6 +9,7 @@
 // 5. Create a way to calculate the time way. Using difference between start and current time.
 //    Then take the difference and modulus by frequency. (This step can be completed in either 3 or 4)
 
+//RJ key first of using firebase, needed apikey and link 
 // Initialize Firebase
 var config = {
     apiKey: "AIzaSyCcPFcbAjIsgXGQwE-A3AcOXkeD40qypE8",
@@ -19,12 +22,16 @@ var config = {
   
   var trainData = firebase.database();
   
+  //RJ Function is used creat clickable function to generate train schedule
   // 2. Populate Firebase Database with initial data (in this case, I did this via Firebase GUI)
   // 3. Button for adding trains
   $("#add-train-btn").on("click", function(event) {
     // Prevent the default form submit behavior
     event.preventDefault();
+    //RJ id this wasnt there i beleive that anytime the page was refreshed the data would be cleared
   
+
+    //RJ this selector is used to grab anything with id "train-name-input" ect  and set = to these new variables
     // Grabs user input
     var trainName = $("#train-name-input")
       .val()
@@ -40,6 +47,7 @@ var config = {
       .trim();
   
     // Creates local "temporary" object for holding train data
+    //RJ this is needed so that variables can be assigned to the newTrain
     var newTrain = {
       name: trainName,
       destination: destination,
@@ -48,15 +56,18 @@ var config = {
     };
   
     // Uploads train data to the database
+    //RJ needed to assign object 
     trainData.ref().push(newTrain);
   
     // Logs everything to console
+    //RJ logs into console so data is not lost 
     console.log(newTrain.name);
     console.log(newTrain.destination);
     console.log(newTrain.firstTrain);
     console.log(newTrain.frequency);
   
     // Alert
+    //RJ this is a pop-up type message that the user has to click out of 
     alert("Train successfully added");
   
     // Clears all of the text-boxes
@@ -71,12 +82,15 @@ var config = {
     console.log(childSnapshot.val());
   
     // Store everything into a variable.
+    //RJ important that info stored as variables so that can be stored w firebase
     var tName = childSnapshot.val().name;
     var tDestination = childSnapshot.val().destination;
     var tFrequency = childSnapshot.val().frequency;
     var tFirstTrain = childSnapshot.val().firstTrain;
   
+    //RJ this is splitting the string to assist with time
     var timeArr = tFirstTrain.split(":");
+    //RJ creating way to take string and view time as hours and mins
     var trainTime = moment()
       .hours(timeArr[0])
       .minutes(timeArr[1]);
@@ -100,10 +114,12 @@ var config = {
         .add(tMinutes, "m")
         .format("hh:mm A");
     }
+    //RJ console.loging the info 
     console.log("tMinutes:", tMinutes);
     console.log("tArrival:", tArrival);
   
     // Add each train's data into the table
+    //shift the data into a table to create user friendly way to view info
     $("#train-table > tbody").append(
       $("<tr>").append(
         $("<td>").text(tName),
